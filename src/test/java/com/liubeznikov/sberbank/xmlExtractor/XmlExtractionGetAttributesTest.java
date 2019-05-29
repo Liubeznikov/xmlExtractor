@@ -15,6 +15,7 @@ public class XmlExtractionGetAttributesTest {
 
     private final String xmlFilePath = "src/test/resources/data.xml";
     private final String invalidXmlFilePath = "src/test/resources/invalidXml.xml";
+    private final String noAttributesXmlFilePath = "src/test/resources/noAttributesData.xml";
 
     @Test
     public void testExtractingAttributeMap() {
@@ -46,8 +47,26 @@ public class XmlExtractionGetAttributesTest {
         }
     }
 
-    @Test
-    public void testExtractingAttributeMapFromInvalidXml() {
+    @Test(expected = SAXException.class)
+    public void testExtractingAttributeMapFromInvalidXml() throws SAXException {
+        try {
+            new XmlDataExtractor(invalidXmlFilePath);
+        } catch (ParserConfigurationException | IOException ex) {
+            Assert.fail();
+        } catch (SAXException e){
+            Assert.assertTrue(e.getMessage().contains("The element type \"pars\" must be terminated by the matching end-tag \"</pars>\"."));
+            throw e;
+        }
+    }
 
+    @Test
+    public void testExtractingEmptyAttributeMap() {
+        try {
+            XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(noAttributesXmlFilePath);
+            Optional<Map<String, String>> attributes = xmlDataExtractor.getAttributes("1", "ГРАЖДАНСТВО");
+            Assert.assertFalse(attributes.isPresent());
+        } catch (XmlParseException | ParserConfigurationException | IOException | SAXException ex) {
+            Assert.fail();
+        }
     }
 }

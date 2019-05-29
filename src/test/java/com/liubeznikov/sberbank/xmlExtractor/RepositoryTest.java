@@ -14,7 +14,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -31,7 +34,7 @@ public class RepositoryTest {
     @Test
     public void saveTest() {
         DocumentType doc = new DocumentType();
-        doc.setName("qwerty");
+        doc.setName("someDocumentTypeName");
         DocumentType save = documentTypeRepository.save(doc);
         Assert.assertEquals(doc.getName(), save.getName());
     }
@@ -54,7 +57,12 @@ public class RepositoryTest {
     @Test
     public void saveAndCheckDocumentTypeInDb() {
         final String XmlDataPath = "src/test/resources/data.xml";
-        XmlDataExtractor e = new XmlDataExtractor(XmlDataPath);
+        XmlDataExtractor e = null;
+        try {
+            e = new XmlDataExtractor(XmlDataPath);
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Assert.fail();
+        }
         List<String> resultList = null;
         try {
             resultList = e.getSortedDocList().get();
