@@ -2,6 +2,8 @@ package com.liubeznikov.sberbank.xmlExtractor.extractor;
 
 
 import com.liubeznikov.sberbank.xmlExtractor.exeptions.XmlParseException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -16,6 +18,7 @@ import java.util.*;
 
 public class XmlDataExtractor {
 
+    private static final Logger logger = LogManager.getLogger(XmlDataExtractor.class);
     private Document doc;
     private XPath xpath;
 
@@ -26,10 +29,13 @@ public class XmlDataExtractor {
             doc = builder.parse(xmlUrl);
             XPathFactory xpathFactory = XPathFactory.newInstance();
             xpath = xpathFactory.newXPath();
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            logger.error("Error with newDocumentBuilder()", e);
+        } catch (SAXException e) {
+            logger.error("xml invalid ", e);
+        } catch (IOException e) {
+            logger.error("xmlUrl is incorrect", e);
         }
-
     }
 
     public Optional<List<String>> getSortedDocList() throws XmlParseException {
@@ -74,7 +80,7 @@ public class XmlDataExtractor {
             XPathExpression xPathExpression = xpath.compile(expression);
             return (NodeList) xPathExpression.evaluate(doc, XPathConstants.NODESET);
         } catch (XPathExpressionException e) {
-            //addLog
+            logger.error("Expression: " + expression + " expression cannot be parsed or evaluated", e);
             throw new XmlParseException(e.getMessage());
         }
     }
