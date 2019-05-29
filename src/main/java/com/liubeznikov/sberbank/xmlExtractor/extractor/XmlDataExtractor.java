@@ -22,7 +22,7 @@ public class XmlDataExtractor {
     private Document doc;
     private XPath xpath;
 
-    public XmlDataExtractor(String xmlUrl) {
+    public XmlDataExtractor(String xmlUrl) throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
@@ -31,10 +31,13 @@ public class XmlDataExtractor {
             xpath = xpathFactory.newXPath();
         } catch (ParserConfigurationException e) {
             logger.error("Error with newDocumentBuilder()", e);
+            throw e;
         } catch (SAXException e) {
             logger.error("xml invalid ", e);
+            throw e;
         } catch (IOException e) {
             logger.error("xmlUrl is incorrect", e);
+            throw e;
         }
     }
 
@@ -63,7 +66,6 @@ public class XmlDataExtractor {
         final String expValue = "@*";
         final String expression = expBase + expCondition + expValue;
         NodeList nodeList = getNodeList(expression);
-
         if (nodeList.getLength() > 0) {
             for (int i = 0; i < nodeList.getLength(); i++) {
                 map.put(nodeList.item(i).getNodeName(), nodeList.item(i).getNodeValue());
@@ -72,7 +74,6 @@ public class XmlDataExtractor {
         } else {
             return Optional.empty();
         }
-
     }
 
     private NodeList getNodeList(String expression) throws XmlParseException {

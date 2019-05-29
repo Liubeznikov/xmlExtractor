@@ -1,30 +1,19 @@
 package com.liubeznikov.sberbank.xmlExtractor;
 
 import com.liubeznikov.sberbank.xmlExtractor.exeptions.XmlParseException;
-import com.liubeznikov.sberbank.xmlExtractor.service.DocumentTypeService;
 import com.liubeznikov.sberbank.xmlExtractor.extractor.XmlDataExtractor;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class XmlExtractionSortedListTest {
-
-
-
     private final String XmlDataPath = "src/test/resources/data.xml";
     private final String invalidXmlDataPath = "src/test/resources/invalidXml.xml";
     private final String XmlWithoutDataPath = "src/test/resources/withoutData.xml";
@@ -34,7 +23,12 @@ public class XmlExtractionSortedListTest {
 
     @Test
     public void listTest() {
-        XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(XmlDataPath);
+        XmlDataExtractor xmlDataExtractor = null;
+        try {
+            xmlDataExtractor = new XmlDataExtractor(XmlDataPath);
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            Assert.fail();
+        }
         List<String> resultList = null;
 
         try {
@@ -49,9 +43,14 @@ public class XmlExtractionSortedListTest {
     }
 
 
-    @Test(expected =  SAXException.class)
+    @Test(expected = SAXException.class)
     public void invalidXmlListTest() {
-        XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(invalidXmlDataPath);
+        XmlDataExtractor xmlDataExtractor = null;
+        try {
+            xmlDataExtractor = new XmlDataExtractor(invalidXmlDataPath);
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            Assert.fail();
+        }
         List<String> resultList = null;
         try {
             Optional<List<String>> sortedDocList = xmlDataExtractor.getSortedDocList();
@@ -65,35 +64,40 @@ public class XmlExtractionSortedListTest {
 
     @Test
     public void withoutDataListTest() {
-        XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(XmlWithoutDataPath);
-        List<String> resultList = null;
         try {
-            Optional<List<String>> sortedDocList = xmlDataExtractor.getSortedDocList();
-            if (sortedDocList.isPresent()) {
-                resultList = sortedDocList.get();
+            XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(XmlWithoutDataPath);
+            List<String> resultList = null;
+            try {
+                Optional<List<String>> sortedDocList = xmlDataExtractor.getSortedDocList();
+                if (sortedDocList.isPresent()) {
+                    resultList = sortedDocList.get();
+                }
+            } catch (XmlParseException e) {
+                e.printStackTrace();
             }
-        } catch (XmlParseException e) {
-            e.printStackTrace();
+            Assert.assertNull(resultList);
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            Assert.fail();
         }
-        Assert.assertEquals(null, resultList);
     }
 
     //@Test(expected =  IOException.class)
     @Test
     public void badXmlPathListTest() {
-        XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(XmlBadPath);
-        List<String> resultList = null;
         try {
-            Optional<List<String>> sortedDocList = xmlDataExtractor.getSortedDocList();
-            if (sortedDocList.isPresent()) {
-                resultList = sortedDocList.get();
+            XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(XmlBadPath);
+            List<String> resultList = null;
+            try {
+                Optional<List<String>> sortedDocList = xmlDataExtractor.getSortedDocList();
+                if (sortedDocList.isPresent()) {
+                    resultList = sortedDocList.get();
+                }
+            } catch (XmlParseException e) {
+                e.printStackTrace();
             }
-
-        } catch (XmlParseException e) {
-            e.printStackTrace();
+            Assert.assertNull(resultList);
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            Assert.fail();
         }
-        Assert.assertEquals(null, resultList);
     }
-
-
 }
