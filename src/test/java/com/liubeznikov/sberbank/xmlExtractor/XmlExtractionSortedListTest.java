@@ -42,33 +42,26 @@ public class XmlExtractionSortedListTest {
         Assert.assertEquals(expect, resultList);
     }
 
-
-    @Test(expected = SAXException.class)
-    public void invalidXmlListTest() throws IOException, SAXException, ParserConfigurationException {
-        XmlDataExtractor xmlDataExtractor = null;
-        try {
-            xmlDataExtractor = new XmlDataExtractor(invalidXmlDataPath);
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            throw e;
-           // Assert.fail();
-        }
-    }
-
     @Test
     public void withoutDataListTest() {
         try {
             XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(XmlWithoutDataPath);
-            List<String> resultList = null;
             try {
                 Optional<List<String>> sortedDocList = xmlDataExtractor.getSortedDocList();
-                if (sortedDocList.isPresent()) {
-                    resultList = sortedDocList.get();
-                }
+                Assert.assertFalse(sortedDocList.isPresent());
             } catch (XmlParseException e) {
-                e.printStackTrace();
+                Assert.fail();
             }
-            Assert.assertNull(resultList);
         } catch (ParserConfigurationException | IOException | SAXException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test(expected = SAXException.class)
+    public void invalidXmlListTest() throws SAXException {
+        try {
+            new XmlDataExtractor(invalidXmlDataPath);
+        } catch (ParserConfigurationException | IOException e) {
             Assert.fail();
         }
     }
@@ -76,17 +69,7 @@ public class XmlExtractionSortedListTest {
     @Test(expected = IOException.class)
     public void badXmlPathListTest() throws IOException{
         try {
-            XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(XmlBadPath);
-            List<String> resultList = null;
-            try {
-                Optional<List<String>> sortedDocList = xmlDataExtractor.getSortedDocList();
-                if (sortedDocList.isPresent()) {
-                    resultList = sortedDocList.get();
-                }
-            } catch (XmlParseException e) {
-                e.printStackTrace();
-            }
-            Assert.assertNull(resultList);
+            new XmlDataExtractor(XmlBadPath);
         } catch (ParserConfigurationException | SAXException e) {
             Assert.fail();
         }
