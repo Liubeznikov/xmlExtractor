@@ -19,7 +19,7 @@ import java.util.Map;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {XmlExtractorApplication.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class SimpleTest {
+public class XmlExtractionTest {
 
     @Autowired
     DocumentTypeService documentTypeService;
