@@ -47,7 +47,7 @@ public class XmlDataExtractor {
         return list;
     }
 
-    public void printAttributes(String parStep, String parName) {
+    public Map<String,String> getAttributes(String parStep, String parName) {
         Map<String, String> map = new LinkedHashMap<>();
         try {
 
@@ -62,7 +62,7 @@ public class XmlDataExtractor {
             e.printStackTrace();
         }
 
-        System.out.println(map.toString());
+        return map;
     }
 
 }

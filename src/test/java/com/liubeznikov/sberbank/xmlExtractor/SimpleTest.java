@@ -2,15 +2,18 @@ package com.liubeznikov.sberbank.xmlExtractor;
 
 import com.liubeznikov.sberbank.xmlExtractor.service.DocumentTypeService;
 import com.liubeznikov.sberbank.xmlExtractor.utils.XmlDataExtractor;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Map;
+
 @RunWith(SpringRunner.class)
 
 @SpringBootTest(classes = {XmlExtractorApplication.class})
@@ -32,13 +35,14 @@ public class SimpleTest {
     @Test
     public void printAttr(){
         XmlDataExtractor e = new XmlDataExtractor(XmlDataPath)  ;
-        e.printAttributes("1","ГРАЖДАНСТВО");
+        Map<String, String > map = e.getAttributes("1","ГРАЖДАНСТВО");
+        System.out.println(map.toString());
 
     }
     @Test
     public void saveAndCheckDocumentTypeInDb(){
 
-        //AddDocumentTypeInDb addDocumentTypeInDb = new AddDocumentTypeInDb();
+
         XmlDataExtractor e = new XmlDataExtractor(XmlDataPath)  ;
         List<String> resultList = e.getSortedDocList();
         documentTypeService.saveList(resultList);
