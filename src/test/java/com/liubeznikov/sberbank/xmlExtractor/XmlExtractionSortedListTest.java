@@ -23,20 +23,20 @@ import java.util.Optional;
 
 public class XmlExtractionSortedListTest {
 
-    @Autowired
-    DocumentTypeService documentTypeService;
 
-    private final String XmlDataPath = "D:\\java\\xmlExtractor\\src\\test\\resources\\data.xml";
-    private final String invalidXmlDataPath = "D:\\java\\xmlExtractor\\src\\test\\resources\\invalidXml.xml";
-    private final String XmlWithoutDataPath = "D:\\java\\xmlExtractor\\src\\test\\resources\\withoutData.xml";
-    private final String XmlBadPath = "D:\\java\\xmlExtractor\\src\\test\\resources\\data.xl";
+
+    private final String XmlDataPath = "src/test/resources/data.xml";
+    private final String invalidXmlDataPath = "src/test/resources/invalidXml.xml";
+    private final String XmlWithoutDataPath = "src/test/resources/withoutData.xml";
+    private final String XmlBadPath = "src/test/resources/data.xl";
+    private final List<String> expect = Arrays.asList("ВОДИТ УДОСТОВЕРЕНИЕ", "ИНН", "ОХОТНИЧИЙ БИЛЕТ", "ПАСПОРТ МОРЯКА",
+            "ПАСПОРТ РФ", "РАЗРЕШ НА ОРУЖИЕ", "СВИД О РОЖДЕНИИ", "СВИД_РЕГ_ТС", "УДОСТОВЕР ВОЕНСЛУЖ");
 
     @Test
     public void listTest() {
         XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(XmlDataPath);
         List<String> resultList = null;
-        List<String> expect = Arrays.asList("ВОДИТ УДОСТОВЕРЕНИЕ", "ИНН", "ОХОТНИЧИЙ БИЛЕТ", "ПАСПОРТ МОРЯКА",
-                "ПАСПОРТ РФ", "РАЗРЕШ НА ОРУЖИЕ", "СВИД О РОЖДЕНИИ", "СВИД_РЕГ_ТС", "УДОСТОВЕР ВОЕНСЛУЖ");
+
         try {
             Optional<List<String>> sortedDocList = xmlDataExtractor.getSortedDocList();
             if (sortedDocList.isPresent()) {
@@ -65,35 +65,35 @@ public class XmlExtractionSortedListTest {
 
     @Test
     public void withoutDataListTest() {
-        XmlDataExtractor e = new XmlDataExtractor(XmlWithoutDataPath);
+        XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(XmlWithoutDataPath);
         List<String> resultList = null;
         try {
-            resultList = e.getSortedDocList().get();
-        } catch (XmlParseException e1) {
-            e1.printStackTrace();
+            Optional<List<String>> sortedDocList = xmlDataExtractor.getSortedDocList();
+            if (sortedDocList.isPresent()) {
+                resultList = sortedDocList.get();
+            }
+        } catch (XmlParseException e) {
+            e.printStackTrace();
         }
-        for (String str : resultList) {
-            System.out.println(str);
-        }
+        Assert.assertEquals(null, resultList);
     }
 
     //@Test(expected =  IOException.class)
     @Test
-    public void badUrlListTest() {
-        XmlDataExtractor e = new XmlDataExtractor("123");
-    }
-
-    @Test
-    public void saveAndCheckDocumentTypeInDb() {
-        XmlDataExtractor e = new XmlDataExtractor(XmlDataPath);
+    public void badXmlPathListTest() {
+        XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(XmlBadPath);
         List<String> resultList = null;
         try {
-            resultList = e.getSortedDocList().get();
-        } catch (XmlParseException e1) {
-            e1.printStackTrace();
+            Optional<List<String>> sortedDocList = xmlDataExtractor.getSortedDocList();
+            if (sortedDocList.isPresent()) {
+                resultList = sortedDocList.get();
+            }
+
+        } catch (XmlParseException e) {
+            e.printStackTrace();
         }
-        documentTypeService.save(resultList);
-        System.out.println(documentTypeService.getAll().toString());
-        Assert.assertEquals(resultList, documentTypeService.getAll());
+        Assert.assertEquals(null, resultList);
     }
+
+
 }

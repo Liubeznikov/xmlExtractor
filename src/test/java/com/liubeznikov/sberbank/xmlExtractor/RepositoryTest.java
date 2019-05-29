@@ -1,8 +1,11 @@
 package com.liubeznikov.sberbank.xmlExtractor;
 
 import com.liubeznikov.sberbank.xmlExtractor.entity.DocumentType;
+import com.liubeznikov.sberbank.xmlExtractor.exeptions.XmlParseException;
+import com.liubeznikov.sberbank.xmlExtractor.extractor.XmlDataExtractor;
 import com.liubeznikov.sberbank.xmlExtractor.repository.DocumentTypeRepository;
 
+import com.liubeznikov.sberbank.xmlExtractor.service.DocumentTypeService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +24,9 @@ public class RepositoryTest {
 
     @Autowired
     private DocumentTypeRepository documentTypeRepository;
+
+    @Autowired
+    DocumentTypeService documentTypeService;
 
     @Test
     public void saveTest() {
@@ -43,5 +49,20 @@ public class RepositoryTest {
         documentTypeRepository.save(doc);
         List<DocumentType> list = documentTypeRepository.findAll();
         Assert.assertEquals(list.size(), 1);
+    }
+
+    @Test
+    public void saveAndCheckDocumentTypeInDb() {
+        final String XmlDataPath = "src/test/resources/data.xml";
+        XmlDataExtractor e = new XmlDataExtractor(XmlDataPath);
+        List<String> resultList = null;
+        try {
+            resultList = e.getSortedDocList().get();
+        } catch (XmlParseException e1) {
+            e1.printStackTrace();
+        }
+        documentTypeService.save(resultList);
+        System.out.println(documentTypeService.getAll().toString());
+        Assert.assertEquals(resultList, documentTypeService.getAll());
     }
 }
