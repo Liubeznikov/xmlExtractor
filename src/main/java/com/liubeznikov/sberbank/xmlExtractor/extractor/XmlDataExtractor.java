@@ -28,13 +28,13 @@ public class XmlDataExtractor {
             XPathFactory xpathFactory = XPathFactory.newInstance();
             xpath = xpathFactory.newXPath();
         } catch (ParserConfigurationException e) {
-            logger.error("Error with newDocumentBuilder()", e);
+            logger.error("XmlDataExtractor cannot be created, xml document builder fails", e);
             throw e;
         } catch (SAXException e) {
-            logger.error("xml invalid ", e);
+            logger.error("XmlDataExtractor cannot be created, parse errors occurred", e);
             throw e;
         } catch (IOException e) {
-            logger.error("xmlUrl is incorrect", e);
+            logger.error("XmlDataExtractor cannot be created, IO exception occurred", e);
             throw e;
         }
     }
