@@ -44,22 +44,15 @@ public class XmlExtractionSortedListTest {
 
 
     @Test(expected = SAXException.class)
-    public void invalidXmlListTest() {
+    public void invalidXmlListTest() throws IOException, SAXException, ParserConfigurationException {
         XmlDataExtractor xmlDataExtractor = null;
         try {
             xmlDataExtractor = new XmlDataExtractor(invalidXmlDataPath);
         } catch (ParserConfigurationException | IOException | SAXException e) {
-            Assert.fail();
+            throw e;
+           // Assert.fail();
         }
-        List<String> resultList = null;
-        try {
-            Optional<List<String>> sortedDocList = xmlDataExtractor.getSortedDocList();
-            if (sortedDocList.isPresent()) {
-                resultList = sortedDocList.get();
-            }
-        } catch (XmlParseException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Test
