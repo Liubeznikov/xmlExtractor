@@ -4,6 +4,7 @@ import com.liubeznikov.sberbank.xmlExtractor.exeptions.XmlParseException;
 import com.liubeznikov.sberbank.xmlExtractor.extractor.XmlDataExtractor;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.test.context.TestPropertySource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -53,7 +54,7 @@ public class XmlExtractionGetAttributesTest {
             new XmlDataExtractor(invalidXmlFilePath);
         } catch (ParserConfigurationException | IOException ex) {
             Assert.fail();
-        } catch (SAXException e){
+        } catch (SAXException e) {
             Assert.assertTrue(e.getMessage().contains("The element type \"pars\" must be terminated by the matching end-tag \"</pars>\"."));
             throw e;
         }
@@ -65,6 +66,23 @@ public class XmlExtractionGetAttributesTest {
             XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(noAttributesXmlFilePath);
             Optional<Map<String, String>> attributes = xmlDataExtractor.getAttributes("1", "ГРАЖДАНСТВО");
             Assert.assertFalse(attributes.isPresent());
+        } catch (XmlParseException | ParserConfigurationException | IOException | SAXException ex) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testPrintingMapValues() {
+        try {
+            XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(xmlFilePath);
+            Optional<Map<String, String>> attributes = xmlDataExtractor.getAttributes("1", "ГРАЖДАНСТВО");
+            Assert.assertTrue(attributes.isPresent());
+            Map<String, String> extractedAttibutes = attributes.get();
+            StringBuilder sb = new StringBuilder();
+            extractedAttibutes.forEach((key, value) -> {
+                sb.append(key).append(" -> ").append(value).append(", ");
+            });
+            System.out.println(sb);
         } catch (XmlParseException | ParserConfigurationException | IOException | SAXException ex) {
             Assert.fail();
         }
