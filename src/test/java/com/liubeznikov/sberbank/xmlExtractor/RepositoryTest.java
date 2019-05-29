@@ -35,7 +35,6 @@ public class RepositoryTest {
         documentTypeRepository.save(null);
     }
 
-
     @Test
     public void saveTwoTimesTest() {
         DocumentType doc = new DocumentType();
@@ -45,6 +44,4 @@ public class RepositoryTest {
         List<DocumentType> list = documentTypeRepository.findAll();
         Assert.assertEquals(list.size(), 1);
     }
-
-
 }

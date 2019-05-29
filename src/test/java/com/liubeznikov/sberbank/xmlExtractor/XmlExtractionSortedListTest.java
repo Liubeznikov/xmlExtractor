@@ -21,10 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = {XmlExtractorApplication.class})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class XmlExtractionTest {
+public class XmlExtractionSortedListTest {
 
     @Autowired
     DocumentTypeService documentTypeService;
@@ -56,7 +53,6 @@ public class XmlExtractionTest {
     public void invalidXmlListTest() {
         XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(invalidXmlDataPath);
         List<String> resultList = null;
-
         try {
             Optional<List<String>> sortedDocList = xmlDataExtractor.getSortedDocList();
             if (sortedDocList.isPresent()) {
@@ -65,7 +61,6 @@ public class XmlExtractionTest {
         } catch (XmlParseException e) {
             e.printStackTrace();
         }
-
     }
 
     @Test
@@ -86,27 +81,10 @@ public class XmlExtractionTest {
     @Test
     public void badUrlListTest() {
         XmlDataExtractor e = new XmlDataExtractor("123");
-
-    }
-
-
-    @Test
-    public void printAttr() {
-        XmlDataExtractor e = new XmlDataExtractor(XmlDataPath);
-        Map<String, String> map = null;
-        try {
-            map = e.getAttributes("1", "ГРАЖДАНСТВО").get();
-        } catch (XmlParseException e1) {
-            e1.printStackTrace();
-        }
-        System.out.println(map.toString());
-
     }
 
     @Test
     public void saveAndCheckDocumentTypeInDb() {
-
-
         XmlDataExtractor e = new XmlDataExtractor(XmlDataPath);
         List<String> resultList = null;
         try {
@@ -115,11 +93,7 @@ public class XmlExtractionTest {
             e1.printStackTrace();
         }
         documentTypeService.save(resultList);
-
         System.out.println(documentTypeService.getAll().toString());
         Assert.assertEquals(resultList, documentTypeService.getAll());
-
     }
-
-
 }
