@@ -1,6 +1,5 @@
 package com.liubeznikov.sberbank.xmlExtractor.extractor;
 
-
 import com.liubeznikov.sberbank.xmlExtractor.exeptions.XmlParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +13,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.*;
 import java.io.IOException;
 import java.util.*;
-
 
 public class XmlDataExtractor {
 
