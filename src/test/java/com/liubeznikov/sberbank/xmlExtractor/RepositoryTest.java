@@ -1,6 +1,6 @@
 package com.liubeznikov.sberbank.xmlExtractor;
 
-import com.liubeznikov.sberbank.xmlExtractor.entities.DocumentType;
+import com.liubeznikov.sberbank.xmlExtractor.entity.DocumentType;
 import com.liubeznikov.sberbank.xmlExtractor.repository.DocumentTypeRepository;
 
 import org.junit.Assert;

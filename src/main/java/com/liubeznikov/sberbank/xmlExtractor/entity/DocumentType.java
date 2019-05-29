@@ -1,4 +1,4 @@
-package com.liubeznikov.sberbank.xmlExtractor.entities;
+package com.liubeznikov.sberbank.xmlExtractor.entity;
 
 import javax.persistence.*;
 
