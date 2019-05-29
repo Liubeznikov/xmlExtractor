@@ -9,7 +9,9 @@ public class DocumentType {
     @Id
     @GeneratedValue
     private Long id;
-    private String documentName;
+
+    @Column(unique = true)
+    private String name;
 
     public Long getId() {
         return id;
@@ -19,11 +21,11 @@ public class DocumentType {
         this.id = id;
     }
 
-    public String getDocumentName() {
-        return documentName;
+    public String getName() {
+        return name;
     }
 
-    public void setDocumentName(String documentName) {
-        this.documentName = documentName;
+    public void setName(String name) {
+        this.name = name;
     }
 }
