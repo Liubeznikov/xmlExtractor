@@ -52,7 +52,6 @@ public class XmlExtractionSortedListTest {
             throw e;
            // Assert.fail();
         }
-
     }
 
     @Test
@@ -74,9 +73,8 @@ public class XmlExtractionSortedListTest {
         }
     }
 
-    //@Test(expected =  IOException.class)
-    @Test
-    public void badXmlPathListTest() {
+    @Test(expected = IOException.class)
+    public void badXmlPathListTest() throws IOException{
         try {
             XmlDataExtractor xmlDataExtractor = new XmlDataExtractor(XmlBadPath);
             List<String> resultList = null;
@@ -89,7 +87,7 @@ public class XmlExtractionSortedListTest {
                 e.printStackTrace();
             }
             Assert.assertNull(resultList);
-        } catch (ParserConfigurationException | IOException | SAXException e) {
+        } catch (ParserConfigurationException | SAXException e) {
             Assert.fail();
         }
     }
