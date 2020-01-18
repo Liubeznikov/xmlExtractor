@@ -1,89 +1,129 @@
-# Project Title
+## Постановка задачи
+Для файла data.xml выполнить следующие задания:
 
-One Paragraph of project description goes here
+1.Необходимо сформировать коллекцию, содержащую все виды документов в отсортированном порядке.
 
-## Getting Started
+2.Вывести имена и значения всех атрибутов для par step="1" name="ГРАЖДАНСТВО"
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+3.Задача со звездочкой: создать в базе таблицу-справочник со значениями из первой части
 
-### Prerequisites
+## Запуск проекта
 
-What things you need to install the software and how to install them
+Для сборки потребуется Maven. Откройте проект в своей IDE и запустите тесты. 
 
-```
-Give examples
-```
+## Описание классов проекта
 
-### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+1.Класс для связи записи в базе данных и объектов в программе.
 
 ```
-Give the example
+public class DocumentType 
 ```
 
-And repeat
+2.Класс отвечающий за извлечение данных из XML.
 
 ```
-until finished
+public class XmlDataExtractor
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+3.Сервис для сохранения и получения данных избазы данных.
 
 ```
-Give an example
+public class DocumentTypeService
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
+3.Интерфес репозитория для взаимодействия с базой данных.
 
 ```
-Give an example
+public interface DocumentTypeRepository extends JpaRepository<DocumentType, Long>
 ```
 
-## Deployment
+## Описание тестов
 
-Add additional notes about how to deploy this on a live system
+####Тесты для проверки взаимодействия с базой данных.
 
-## Built With
+1.Тест для проверки сохраняется ли значения в базу данных.
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
+```
+public void saveTest()
+```
+
+2.Тест проверяет дублируются ли одинаковые записи при нескольких сохранениях.
+
+```
+public void saveTwoTimesTest()
+```
+
+3.Тест в котором выполняется задание 3.
+
+```
+public void saveAndCheckDocumentTypeInDb()
+```
+
+
+
+####Тесты для задания 1 и проверки различных ситуаций которые могут возникнуть.
+
+1.Тест для проверки правильности выполнения задания 1.
+
+```
+public void listTest()
+```
+
+2.Тест результата при отсутствии списка документов в файле.
+
+```
+ public void withoutDataListTest() 
+```
+
+3.Тест результата при неправильной структуре тэгов.
+
+```
+  public void invalidXmlListTest() throws SAXException
+```
+
+4.Тест результата при неправильном пути к файлу.
+
+```
+  public void badXmlPathListTest() throws IOException
+```
+
+####Тесты для задания 2 и проверки различных ситуаций которые могут возникнуть.
+
+1.Тест проверяет правильность извлечения атрибутов.
+
+```
+ public void testExtractingAttributeMap()
+```
+
+2.Тест проверяет извлечение атрибутов при неправильной структуре файла.
+
+```
+public void testExtractingAttributeMapFromInvalidXml() throws SAXException 
+```
+
+3.Тест проверяет правильность работы программы при отсутствии атрибутов.
+
+```
+public void testExtractingEmptyAttributeMap()
+```
+
+4.Выполнение вывода для задания 2.
+
+```
+public void testPrintingMapValues()
+```
+
+
+## Сделано с помощью
+
+* [SpringBoot](https://spring.io/) - SpringBoot framework
 * [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [H2](http://h2database.com/html/main.html) - Database
 
-## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+## Автор
 
-## Versioning
+* **Любезников Николай**  
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
-
-## Условия задания
